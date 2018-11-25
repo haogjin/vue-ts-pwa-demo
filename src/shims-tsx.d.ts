@@ -10,6 +10,13 @@ declare global {
       [elem: string]: any
     }
   }
+  // 自定义接口
+  interface News {
+    author_name: string;
+    date: string;
+    thumbnail_pic_s: string;
+    title: string;
+  }
 }
 
 

@@ -1,42 +1,61 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa" target="_blank" rel="noopener">pwa</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div>{{msg}}</div>
+  <div v-if="!complete" >
+     {{
+       '我还在渲染 这里可以放骨架屏'
+     }}
+    </div>
+   <div v-else v-for="(item, index) in newsListShow" :key="index">
+      <news-cell
+      :newsDate="item"
+      :key="index"
+      ></news-cell>
+    </div> 
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-
+import api from '../api/http.ts'
+import NewsCell from './NewsCell/NewsCell.vue'
 @Component
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
+//  @Component({
+//     components: {
+//       NewsCell,
+//     },
+//   })
+  private newsListShow!: News[];
+  private complete!: boolean;
+  private data() {
+    return {
+      newsListShow: [],
+      complete: false,
+    };
+  }
+  // constructor() {
+  //   super();
+  //   this.newsListShow = [];
+  //   this.complete = false;
+  // }
+  private created(){
+    this.setNewsApi()
+  }
+  private setNewsApi() { 
+      api.JH_news('/news/index', 'type=top&key=123456')
+      .then(res => {
+        console.log(res);
+        this.newsListShow = res.articles;
+        this.complete = true
+        console.log(this.newsListShow);    
+      }).catch((err: any) => {
+        this.complete = false;
+        throw new Error(err);
+      });;
+  }
+  
 }
 </script>
 
@@ -55,5 +74,38 @@ li {
 }
 a {
   color: #42b983;
+}
+.topNav{
+  width: 100%;
+  background: #ED4040;
+  position: fixed;
+  top:0rem;
+  left: 0;
+  z-index: 10;
+}
+.simpleNav{
+  width: 100%;
+  line-height: 1rem;
+  overflow: hidden;
+  overflow-x: auto;
+  text-align: center;
+  font-size: 0;
+  font-family: '微软雅黑';
+  white-space: nowrap;
+}
+.simpleNav::-webkit-scrollbar{height:0px}
+.simpleNavBar{
+  display: inline-block;
+  width: 1.2rem;
+  color:#fff;
+  font-size:0.3rem;
+}
+.navActive{
+  color: #000;
+  border-bottom: 0.05rem solid #000;
+}
+.placeholder{
+  width:100%;
+  height: 1rem;
 }
 </style>

@@ -6,7 +6,10 @@ import './registerServiceWorker'
 import './style/iconfont.js';
 import './style/common.scss';
 import 'normalize.css';// 样式统一插件
+
 import FastClick from 'fastclick';
+// 引入mockjs
+require('./mock.ts')
 
 // 移动端300ms延迟问题，同时解决点透事件的出现。
 if ('addEventListener' in document) {

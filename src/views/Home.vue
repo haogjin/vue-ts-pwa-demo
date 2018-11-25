@@ -35,6 +35,7 @@ private isCollapse: boolean;
   }
  
    private created(): void {
+     console.log(555)
     const vm = this;
     console.log(vm.$store)
     // vm.$store.commit('toggleSideBar', false)
