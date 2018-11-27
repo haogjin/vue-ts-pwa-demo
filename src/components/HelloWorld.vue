@@ -6,7 +6,7 @@
        '我还在渲染 这里可以放骨架屏'
      }}
     </div>
-   <div v-else v-for="(item, index) in newsListShow" :key="index">
+   <div v-for="(item, index) in newsListShow" :key="index">
       <news-cell
       :newsDate="item"
       :key="index"
@@ -19,14 +19,14 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '../api/http.ts'
 import NewsCell from './NewsCell/NewsCell.vue'
-@Component
+ @Component({
+    components: {
+      NewsCell,
+    },
+  })
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
-//  @Component({
-//     components: {
-//       NewsCell,
-//     },
-//   })
+
   private newsListShow!: News[];
   private complete!: boolean;
   private data() {
@@ -41,17 +41,18 @@ export default class HelloWorld extends Vue {
   //   this.complete = false;
   // }
   private created(){
-    this.setNewsApi()
+    // this.setNewsApi()
   }
   private setNewsApi() { 
+    let vm = this
       api.JH_news('/news/index', 'type=top&key=123456')
       .then(res => {
         console.log(res);
-        this.newsListShow = res.articles;
-        this.complete = true
+        vm.newsListShow = res.articles;
+        vm.complete = true
         console.log(this.newsListShow);    
       }).catch((err: any) => {
-        this.complete = false;
+        vm.complete = false;
         throw new Error(err);
       });;
   }

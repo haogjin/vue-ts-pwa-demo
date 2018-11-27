@@ -6,7 +6,10 @@ import './registerServiceWorker'
 import './style/iconfont.js';
 import './style/common.scss';
 import 'normalize.css';// 样式统一插件
+import Vant from 'vant';
+import 'vant/lib/index.css';
 
+Vue.use(Vant);
 import FastClick from 'fastclick';
 // 引入mockjs
 require('./mock.ts')

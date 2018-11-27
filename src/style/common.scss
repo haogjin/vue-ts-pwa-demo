@@ -17,7 +17,10 @@ $exp-five: #BBBBBB;
   -o-border-radius: $radius;
   border-radius: $radius;
 }
-
+// font-size
+@mixin fontSize($size: 16px) {
+  font-size:$size
+}
 // flex布局
 @mixin fja($j: space-between, $a: center) {
   display: flex;
